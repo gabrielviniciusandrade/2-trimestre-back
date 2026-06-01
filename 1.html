@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de CEP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-buscar {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-limpar {
+            background: #6c757d;
+            color: white;
+        }
+
+        .erro {
+            color: red;
+            background: #ffebee;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .resultado {
+            margin-top: 25px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .info {
+            margin: 10px 0;
+            font-size: 1.05rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Consulta de CEP</h1>
+        
+        <label>Digite o CEP:</label>
+        <input type="text" id="cep" maxlength="9" placeholder="00000-000" 
+               onkeypress="if(event.key === 'Enter') pesquisarCep()">
+
+        <div class="botoes">
+            <button class="btn-buscar" onclick="pesquisarCep()">Buscar CEP</button>
+            <button class="btn-limpar" onclick="limparTudo()">Limpar</button>
+        </div>
+
+        <div id="erro" class="erro"></div>
+        
+        <div id="resultado" class="resultado">
+            <h2>Endereço Encontrado</h2>
+            <div class="info"><strong>Logradouro:</strong> <span id="logradouro"></span></div>
+            <div class="info"><strong>Bairro:</strong> <span id="bairro"></span></div>
+            <div class="info"><strong>Cidade:</strong> <span id="cidade"></span></div>
+            <div class="info"><strong>Estado:</strong> <span id="estado"></span></div>
+            <div class="info"><strong>CEP:</strong> <span id="cepEncontrado"></span></div>
+            
+            <button onclick="copiarEndereco()" style="margin-top: 15px; width: 100%;">📋 Copiar Endereço Completo</button>
+        </div>
+    </div>
+
+    <footer>
+        ViaCEP API
+    </footer>
+
+    <script>
+        function pesquisarCep() {
+            const cepInput = document.getElementById("cep").value.trim();
+            const cep = cepInput.replace(/\D/g, '');
+            
+            const erroDiv = document.getElementById("erro");
+            const resultadoDiv = document.getElementById("resultado");
+
+            erroDiv.style.display = "none";
+            resultadoDiv.style.display = "none";
+
+            if (cep.length !== 8) {
+                erroDiv.textContent = "❌ O CEP deve conter 8 dígitos.";
+                erroDiv.style.display = "block";
+                return;
+            }
+
+            const script = document.createElement("script");
+            script.src = `https://viacep.com.br/ws/${cep}/json/?callback=preencherEndereco`;
+            document.body.appendChild(script);
+        }
+
+        function preencherEndereco(conteudo) {
+            const resultadoDiv = document.getElementById("resultado");
+            const erroDiv = document.getElementById("erro");
+
+            if ("erro" in conteudo) {
+                erroDiv.textContent = "❌ CEP não encontrado ou inválido.";
+                erroDiv.style.display = "block";
+                return;
+            }
+
+            document.getElementById("logradouro").textContent = conteudo.logradouro || "Não informado";
+            document.getElementById("bairro").textContent = conteudo.bairro || "Não informado";
+            document.getElementById("cidade").textContent = conteudo.localidade || "Não informado";
+            document.getElementById("estado").textContent = conteudo.uf || "Não informado";
+            document.getElementById("cepEncontrado").textContent = conteudo.cep;
+
+            resultadoDiv.style.display = "block";
+        }
+
+        function copiarEndereco() {
+            const endereco = `
+${document.getElementById("logradouro").textContent}
+${document.getElementById("bairro").textContent}
+${document.getElementById("cidade").textContent} - ${document.getElementById("estado").textContent}
+CEP: ${document.getElementById("cepEncontrado").textContent}
+            `.trim();
+
+            navigator.clipboard.writeText(endereco).then(() => {
+                alert("✅ Endereço copiado para a área de transferência!");
+            });
+        }
+
+        function limparTudo() {
+            document.getElementById("cep").value = "";
+            document.getElementById("resultado").style.display = "none";
+            document.getElementById("erro").style.display = "none";
+        }
+
+        // Máscara automática
+        document.getElementById("cep").addEventListener("input", function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = value.substring(0,5) + '-' + value.substring(5,8);
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
