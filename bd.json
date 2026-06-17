@@ -19,5 +19,12 @@
         "cpf": "333.333.333.33",
         "email": "maria.terceira@gmail.com",
         "senha": "maria123"
+    },
+    {
+        "nome": "gabriel",
+        "data_nasc": "26/04/2010",
+        "cpf": "155.963.989.00",
+        "email": "gabrielvandrade111@gmail.com",
+        "senha": "slknuncumpensa"
     }
 ]
