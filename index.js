@@ -1,7 +1,16 @@
 //npm init 
 //npm i express 
 //cliente rapidAPI
-//http://localhost:3000/perf
+
+
+
+
+//​http://localhost:3000/clientes                                   procura todos os clientes
+//​http://localhost:3000/perfil                                     procura o prfil
+//​http://localhost:3000/clientes/nome/zé                           procura pelo nome
+//​http://localhost:3000/clientes/cpf/111.111.111.11                procura pelo cpf
+//​http://localhost:3000/clientes/data_nasc/
+//http://localhost:3000/
 
 
 const express = require("express")
@@ -9,6 +18,7 @@ const app = express()
 const port = 3000
 app.use(express.json())
 const fs = require('fs')
+const { findPackageJSON } = require("module")
 
 app.post("/clientes", (req, res) =>{
    const cliente=req.body
@@ -98,6 +108,22 @@ app.get("/clientes/nome/:nome", (req, res)=>{
             res.status(500).json({erro: erro.message})
         }
     })
+
+app.delete("/clientes/:cpf", (req, res)=>{
+    //pegar cpf da rota
+    const cpf = req.params.cpf
+try{
+    //abrir o arquivo
+    const bd = JSON.parse(fs.readFileSync("bd.json", "utf8"))
+    //encontra o indice do cliente a ser excluido
+    constindiceCliente
+
+
+
+
+})
+
+
 
 app.listen(port, ()=>{
         console.log("API executando na porta "+ port)
