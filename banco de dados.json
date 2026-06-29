@@ -1,0 +1,56 @@
+[
+    {
+      "cpf": "12345678900",
+      "nome": "Neymar Jr",
+      "idade": 34,
+      "posicao": "Atacante",
+      "camisa": 10,
+      "clube": "Santos",
+      "selecao": "Seleção Brasileira"
+    },
+    {
+      "cpf": "98765432100",
+      "nome": "Vinicius Junior",
+      "idade": 25,
+      "posicao": "Atacante",
+      "camisa": 7,
+      "clube": "Real Madrid",
+      "selecao": "Seleção Brasileira"
+    },
+    {
+      "cpf": "45678912300",
+      "nome": "Rodrygo",
+      "idade": 24,
+      "posicao": "Atacante",
+      "camisa": 11,
+      "clube": "Real Madrid",
+      "selecao": "Seleção Brasileira"
+    },
+    {
+      "cpf": "32165498700",
+      "nome": "Alisson",
+      "idade": 33,
+      "posicao": "Goleiro",
+      "camisa": 1,
+      "clube": "Liverpool",
+      "selecao": "Seleção Brasileira"
+    },
+    {
+      "cpf": "15975345600",
+      "nome": "Marquinhos",
+      "idade": 31,
+      "posicao": "Zagueiro",
+      "camisa": 4,
+      "clube": "PSG",
+      "selecao": "Seleção Brasileira"
+    },
+    {
+      "cpf": "75315985200",
+      "nome": "Bruno Guimarães",
+      "idade": 27,
+      "posicao": "Meio-Campo",
+      "camisa": 5,
+      "clube": "Newcastle",
+      "selecao": "Seleção Brasileira"
+    }
+  ]
