@@ -9,8 +9,8 @@
 //​http://localhost:3000/perfil                                     procura o prfil
 //​http://localhost:3000/clientes/nome/zé                           procura pelo nome
 //​http://localhost:3000/clientes/cpf/111.111.111.11                procura pelo cpf
-//​http://localhost:3000/clientes/data_nasc/
-//http://localhost:3000/
+//http://localhost:3000/clientes/222.222.222.22                     deletar cliente
+
 
 
 const express = require("express")
@@ -93,12 +93,13 @@ app.get("/clientes/nome/:nome", (req, res)=>{
     })
     
 
-    app.get("/clientes/data_nasc/:data_nasc", (req, res)=>{
-        const data_nasc =req.params.data_nasc
+    app.get("/clientes/senha/:senha", (req, res)=>{
+        const senha =req.params.senha
         try {
             const bd = JSON.parse(fs.readFileSync("bd.json", "utf8"))
-            const cliente = bd.find((cliente) => cliente.data_nasc==data_nasc)
+            const cliente = bd.find((cliente) => cliente.senha==senha)
             if(!cliente) {
+                
                 return res.status(404).json({erro:"cliente não existe no BD, digite novamente!!!"})
             }
         
@@ -109,20 +110,26 @@ app.get("/clientes/nome/:nome", (req, res)=>{
         }
     })
 
-app.delete("/clientes/:cpf", (req, res)=>{
-    //pegar cpf da rota
+
+app.delete("/clientes/:cpf", (req, res) => {
+     //pegar cpf da rota
     const cpf = req.params.cpf
-try{
-    //abrir o arquivo
-    const bd = JSON.parse(fs.readFileSync("bd.json", "utf8"))
-    //encontra o indice do cliente a ser excluido
-    constindiceCliente
+    try{
+          //abrir o arquivo
+        const bd = JSON.parse(fs.readFileSync("bd.json", "utf8"))
+         //encontra o indice do cliente a ser excluido
+        const indiceCliente = bd.findIndex((clientes) => clientes.cpf == cpf)
+        if (indiceCliente == -1){
+            return res.status(404).json
+        }
 
-
-
-
-})
-
+        bd.splice(indiceCliente,1)
+        fs.writeFileSync("bd.json",JSON.stringify(bd),"utf8")
+        res.status(200).json({resposta: "cliente excluido com sucesso"})
+    } catch (erro){
+        res.status(500).json({erro: erro.message})
+    }
+}) 
 
 
 app.listen(port, ()=>{
